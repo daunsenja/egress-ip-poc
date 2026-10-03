@@ -1,0 +1,22 @@
+name: egress-ip-probe
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: 'Label for this probe run'
+        required: false
+        default: 'probe'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Show egress IPs
+        run: |
+          echo "label=${{ inputs.label }}"
+          echo "--- IPv4 ---"
+          curl -4 -s --max-time 20 https://ifconfig.me; echo
+          echo "--- IPv6 ---"
+          curl -6 -s --max-time 20 https://ifconfig.me; echo
+          echo "--- ipinfo ---"
+          curl -s --max-time 20 https://ipinfo.io/json; echo
